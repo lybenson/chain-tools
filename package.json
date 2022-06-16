@@ -1,0 +1,13 @@
+{
+  "name": "chainTools",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/lybenson/chainTools.git",
+  "author": "lybenson <757766483@qq.com>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bip39": "^3.0.4",
+    "ethereum-hdwallet": "^0.1.0"
+  }
+}
