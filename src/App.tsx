@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MultiTransfer from './pages/multi-transfer'
 import Home from './pages/home'
+import Header from './components/Header'
 
 function App() {
 
   return (
     <div className="App">
+      <Header />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />}></Route>
