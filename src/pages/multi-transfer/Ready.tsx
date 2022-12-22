@@ -2,17 +2,21 @@ import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from "
 import { ChangeEvent, ChangeEventHandler, useState } from "react"
 import { useAccount } from "wagmi"
 import Papa from 'papaparse'
+import { IReceipt } from './index'
+import useMultiTransferStore from "../../store/multi-transfer"
 
-interface IReceipt {
-  address: string,
-  amount: string
+
+interface IReadyProps {
+  goNext: (index: number, receipts: Array<IReceipt>) => void
 }
 
-export default function Ready () {
+export default function Ready (props: IReadyProps) {
   const toast = useToast()
   const { address } = useAccount()
   const [formatedReceipts, setFormatedReceipts] = useState<Array<IReceipt>>([])
   const [ receipts, setReceipts ] = useState('')
+
+  useMultiTransferStore(state => state.setReceipts)
 
   const parseComplete = (data: Array<Array<string>>) => {
     const formatResult = formatReceipts(data)
@@ -80,6 +84,7 @@ export default function Ready () {
         description: '请至少提供两个地址'
       })
     }
+    props.goNext(1, formatedReceipts)
   }
 
   return (
