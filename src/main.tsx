@@ -7,20 +7,19 @@ import {
   getDefaultWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import { configureChains, createClient, goerli, WagmiConfig } from 'wagmi'
-import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
+import { mainnet, goerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, provider } = configureChains(
-  [goerli, mainnet, polygon, optimism, arbitrum],
+  [goerli, mainnet, polygon, polygonMumbai],
   [
     publicProvider()
   ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
+  appName: 'MyTool chain',
   chains
 });
 const wagmiClient = createClient({
