@@ -58,7 +58,6 @@ export default function Ready (props: IReadyProps) {
   }
 
   const editReceipt = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(event)
     const value = event.target.value
 
     const items = value.split('\n')
@@ -70,11 +69,8 @@ export default function Ready (props: IReadyProps) {
       arr.push([splitArr[0], splitArr[1]])
     })
 
-    console.log(arr)
-
     const formatResult = formatReceipts(arr)
     setFormatedReceipts(formatResult)
-    // stringifyReceipt(formatResult)
     setReceipts(value)
   }
 
@@ -91,7 +87,7 @@ export default function Ready (props: IReadyProps) {
     <Box>
       <FormControl>
         <FormLabel>token地址，默认为主币</FormLabel>
-        <Input></Input>
+        <Input ></Input>
       </FormControl>
 
       <FormControl>

@@ -38,6 +38,7 @@ export default function MultiTransfer () {
 
     const receives: Array<Array<string | BigNumber>> = []
     let totalAmount: BigNumber = BigNumber.from(0)
+
     formatedReceipts.forEach((item) => {
       receives.push([item.address, ethers.utils.parseEther(item.amount)])
       totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
@@ -48,7 +49,6 @@ export default function MultiTransfer () {
       gasLimit: 150000,
       value: totalAmount.toString()
     })
-    console.log(tx.hash)
 
     await tx.wait()
 
