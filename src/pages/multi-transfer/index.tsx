@@ -7,8 +7,9 @@ import Feedback from "./Feedback";
 import { Stepper } from 'react-form-stepper'
 import { useRef, useState } from "react";
 import { BigNumber, ethers } from "ethers";
-import { POLYGON_CONTRACT_ADDRESS } from '../../config'
+import { POLYGON_TESTNET_CONTRACT_ADDRESS, ETHER_TESTNET_CONTRACT_ADDRESS, POLYGON_CONTRACT_ADDRESS, ETHER_CONTRACT_ADDRESS } from '../../config'
 import abi from '../../assets/abi/batchTransfer.json'
+import tokenAbi from '../../assets/abi/token.json'
 export interface IReceipt {
   address: string,
   amount: string
@@ -27,15 +28,25 @@ export default function MultiTransfer () {
   const [activeIndex, setActiveIndex] = useState(0)
   
   const [formatedReceipts, setFormatedReceipts] = useState<Array<IReceipt>>([])
+  const [token, setToken] = useState('')
 
-  const goNext = (index: number, receipts: Array<IReceipt>) => {
+  const goNext = (index: number, receipts: Array<IReceipt>, token: string) => {
     setActiveIndex(index)
-    console.log(receipts)
     setFormatedReceipts(receipts)
+    if (token) setToken(token)
   }
 
   const confirmTransfer = async () => {
     onClose()
+    console.log(chain);
+    
+
+    let CONTRACT_ADDRESS = ETHER_CONTRACT_ADDRESS
+    if (chain?.id === 5) CONTRACT_ADDRESS = ETHER_TESTNET_CONTRACT_ADDRESS
+    if (chain?.id === 1) CONTRACT_ADDRESS = ETHER_CONTRACT_ADDRESS
+    if (chain?.id === 80001) CONTRACT_ADDRESS = POLYGON_TESTNET_CONTRACT_ADDRESS
+    if (chain?.id === 137) CONTRACT_ADDRESS = POLYGON_CONTRACT_ADDRESS
+
     const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer!)
 
     const receives: Array<Array<string | BigNumber>> = []
@@ -48,10 +59,23 @@ export default function MultiTransfer () {
     const zeroAddress = '0x0000000000000000000000000000000000000000'
     // const gasLimit = await contract.estimateGas.distribute(receives, zeroAddress)
 
-    const tx = await contract.distribute(receives, zeroAddress, {
-      gasLimit: 1e6,
-      value: totalAmount.toString()
-    })
+    let address = zeroAddress
+    let tx = null
+    if (token) {
+      address = token
+      const tokenContract = new ethers.Contract(token, tokenAbi, signer!)
+      const approveTx = await tokenContract.approve(contract.address, totalAmount.toString())
+      await approveTx.wait()
+
+      tx = await contract.distribute(receives, address, {
+        gasLimit: 1e6
+      })
+    } else {
+      tx = await contract.distribute(receives, address, {
+        gasLimit: 1e6,
+        value: totalAmount.toString() 
+      })
+    }
 
     await tx.wait()
 

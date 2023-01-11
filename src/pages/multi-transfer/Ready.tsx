@@ -7,7 +7,7 @@ import useMultiTransferStore from "../../store/multi-transfer"
 
 
 interface IReadyProps {
-  goNext: (index: number, receipts: Array<IReceipt>) => void
+  goNext: (index: number, receipts: Array<IReceipt>, token: string) => void
 }
 
 export default function Ready (props: IReadyProps) {
@@ -15,6 +15,9 @@ export default function Ready (props: IReadyProps) {
   const { address } = useAccount()
   const [formatedReceipts, setFormatedReceipts] = useState<Array<IReceipt>>([])
   const [ receipts, setReceipts ] = useState('')
+
+  // 0xFe608d170bcEDC61B8f5596E129036739f9CA4e0
+  const [token, setToken] = useState('')
 
   useMultiTransferStore(state => state.setReceipts)
 
@@ -80,14 +83,19 @@ export default function Ready (props: IReadyProps) {
         description: '请至少提供两个地址'
       })
     }
-    props.goNext(1, formatedReceipts)
+    props.goNext(1, formatedReceipts, token)
+  }
+
+  const editToken = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setToken(value)
   }
 
   return (
     <Box>
       <FormControl>
         <FormLabel>token地址，默认为主币</FormLabel>
-        <Input ></Input>
+        <Input onChange={event => editToken(event)} value={token}></Input>
       </FormControl>
 
       <FormControl>
