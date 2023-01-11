@@ -11,7 +11,7 @@ function App() {
       <Header />
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />}></Route>
+          <Route path='/chain-tools/' element={<Home />}></Route>
           <Route path="/multi-transfer" element={<MultiTransfer />} />
         </Routes>
       </BrowserRouter>
