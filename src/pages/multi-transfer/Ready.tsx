@@ -99,11 +99,17 @@ export default function Ready (props: IReadyProps) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>收款地址列表</FormLabel>
+        <FormLabel>收款地址列表(上传文件或手动输入)</FormLabel>
         <Textarea resize='vertical' value={receipts} onChange={event => editReceipt(event)}></Textarea>
+
       </FormControl>
       <Input type='file' accept=".csv" onChange={event => parse(event)}></Input>
-
+      <div>
+        <span>仅支持csv文件，文件格式为address,amount，如：</span>
+        <div>0xCBA5018De6b2b6F89d84A1F5A68953f07554765e,1</div>
+        <div>0xa6Bf70bd230867c870eF13631D7EFf1AE8Ab85c9,1</div>
+        <div>0x00b5F428905DEA1a67940093fFeaCeee58cA91Ae,2</div>
+      </div>
       <Button onClick={nextStep}>下一步</Button>
     </Box>
   )
