@@ -27,11 +27,11 @@ contract BatchTransfer is AccessControl, Ownable {
     _revokeRole(REWARD_GIVER_ROLE, account);
   }
 
-  function distribute(ReceiveForm[] calldata receives, address _token) external {
+  function distribute(ReceiveForm[] calldata receives, address _token) payable external {
     require(hasRole(REWARD_GIVER_ROLE, msg.sender), 'without permission');
     require(receives.length > 0, 'No recipient');
 
-    if (_token == address(0)) {
+    if (_token == address(0) && msg.value > 0) {
       _distributeNCLT(receives);
     } else {
       _distributeToken(receives, _token);
