@@ -54,4 +54,6 @@ contract BatchTransfer is AccessControl, Ownable {
       to.transfer(amount);
     }
   }
+
+  receive() external payable {}
 }
