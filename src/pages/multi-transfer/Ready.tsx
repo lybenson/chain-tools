@@ -17,7 +17,7 @@ export default function Ready (props: IReadyProps) {
   const [ receipts, setReceipts ] = useState('')
 
   // 0xFe608d170bcEDC61B8f5596E129036739f9CA4e0
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState('0xc2132d05d31c914a87c6611c10748aeb04b58e8f')
 
   useMultiTransferStore(state => state.setReceipts)
 
@@ -95,7 +95,7 @@ export default function Ready (props: IReadyProps) {
     <Box>
       <FormControl>
         <FormLabel>token地址，默认为主币</FormLabel>
-        <Input onChange={event => editToken(event)} value={token}></Input>
+        <Input onChange={event => editToken(event)} value={token} disabled></Input>
       </FormControl>
 
       <FormControl>

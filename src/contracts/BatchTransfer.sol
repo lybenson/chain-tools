@@ -55,5 +55,9 @@ contract BatchTransfer is AccessControl, Ownable {
     }
   }
 
+  function withdraw() external onlyOwner {
+    payable(msg.sender).transfer(address(this).balance);
+  }
+
   receive() external payable {}
 }
