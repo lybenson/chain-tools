@@ -49,17 +49,9 @@ export default function MultiTransfer () {
 
     const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer!)
 
-    const receives: Array<Array<string | BigNumber>> = []
+    let receives: Array<Array<string | BigNumber>> = []
     let totalAmount: BigNumber = BigNumber.from(0)
 
-    formatedReceipts.forEach((item) => {
-      // if (!ethers.utils.isAddress(item.address)) {
-      //   console.log('无效地址', item.address);
-      // }
-      // 0xc2132d05d31c914a87c6611c10748aeb04b58e8f
-      receives.push([item.address.trim(), ethers.utils.parseUnits(item.amount, 6)])
-      totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
-    })
     const zeroAddress = '0x0000000000000000000000000000000000000000'
     // const gasLimit = await contract.estimateGas.distribute(receives, zeroAddress)
 
@@ -68,6 +60,12 @@ export default function MultiTransfer () {
 
     try {
       if (token) {
+        receives = []
+        formatedReceipts.forEach((item) => {
+          receives.push([item.address.trim(), ethers.utils.parseUnits(item.amount, 6)])
+          totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
+        })
+
         address = token
         const tokenContract = new ethers.Contract(token, tokenAbi, signer!)
         const approveTx = await tokenContract.approve(contract.address, totalAmount.toString())
@@ -77,6 +75,11 @@ export default function MultiTransfer () {
           gasLimit: 1e6
         })
       } else {
+        receives = []
+        formatedReceipts.forEach((item) => {
+          receives.push([item.address.trim(), ethers.utils.parseEther(item.amount)])
+          totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
+        })
         tx = await contract.distribute(receives, address, {
           gasLimit: 1e7,
           value: totalAmount.toString() 

@@ -95,7 +95,7 @@ export default function Ready (props: IReadyProps) {
     <Box>
       <FormControl>
         <FormLabel>token地址，默认为主币</FormLabel>
-        <Input onChange={event => editToken(event)} value={token} disabled></Input>
+        <Input onChange={event => editToken(event)} value={token}></Input>
       </FormControl>
 
       <FormControl>
