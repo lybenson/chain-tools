@@ -60,14 +60,18 @@ export default function MultiTransfer () {
 
     try {
       if (token) {
+        address = token
+        const tokenContract = new ethers.Contract(token, tokenAbi, signer!)
+        let decimals = await tokenContract.decimals()
+        if (!decimals) decimals = 18
+
         receives = []
+        totalAmount = BigNumber.from(0)
         formatedReceipts.forEach((item) => {
-          receives.push([item.address.trim(), ethers.utils.parseUnits(item.amount, 6)])
+          receives.push([item.address.trim(), ethers.utils.parseUnits(item.amount, decimals)])
           totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
         })
 
-        address = token
-        const tokenContract = new ethers.Contract(token, tokenAbi, signer!)
         const approveTx = await tokenContract.approve(contract.address, totalAmount.toString())
         await approveTx.wait()
   
@@ -76,6 +80,7 @@ export default function MultiTransfer () {
         })
       } else {
         receives = []
+        totalAmount = BigNumber.from(0)
         formatedReceipts.forEach((item) => {
           receives.push([item.address.trim(), ethers.utils.parseEther(item.amount)])
           totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
