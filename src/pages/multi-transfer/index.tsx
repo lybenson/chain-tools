@@ -69,7 +69,7 @@ export default function MultiTransfer () {
         totalAmount = BigNumber.from(0)
         formatedReceipts.forEach((item) => {
           receives.push([item.address.trim(), ethers.utils.parseUnits(item.amount, decimals)])
-          totalAmount = totalAmount.add(ethers.utils.parseEther(item.amount))
+          totalAmount = totalAmount.add(ethers.utils.parseUnits(item.amount, decimals))
         })
 
         const approveTx = await tokenContract.approve(contract.address, totalAmount.toString())
